@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <link href="styles/style.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <title>原神数据分析</title>
+</head>
+<link href="https://fonts.font.im/css?family=Hanalei+Fill" rel="stylesheet">
+<body>
+<h1>深境螺旋12层角色使用率</h1>
+<img src="images/up.png"  width="800" alt="万叶和温迪在风神像上的合影">
+<div  id="d1" >
+<svg  id="s1" width="200" height="200" > </svg>
+<script>
+ var fData=[
+  {freq:{p1:29.80, p2:22.30, p3:21.20,p4:11.70,p5:4.20}}
+  ];
+  var barColor = 'steelblue';
+  var cc1="天空之刃",cc2="腐殖之剑",cc3="风鹰剑",cc4="西风剑",cc5="试做斩岩";
+      function segColor(c){ return {p1:"#807dba", p2:"#e08214",p3:"#41ab5d",p4:"#0fffff",p5:"#cc00ff"}[c]; }
+      function chat(c){ return {p1:cc1, p2:cc2,p3:cc3,p4:cc4,p5:cc5}[c]; }
+      fData.forEach(function(d){d.total=d.freq.p1+d.freq.p2+d.freq.p3+d.freq.p4+d.freq.p5;});
+      function pieChart(pD){
+          var pC ={},    pieDim ={w:200, h: 200};
+          pieDim.r = Math.min(pieDim.w, pieDim.h) / 2;
+                  
+
+          var piesvg = d3.select("#d1").select("#s1")
+            .attr("width", pieDim.w).attr("height", pieDim.h).append("g")
+            .attr("transform", "translate("+pieDim.w/2+","+pieDim.h/2+")");
+
+          var arc = d3.svg.arc().outerRadius(pieDim.r - 10).innerRadius(0);
+  
+   
+          var pie = d3.layout.pie().sort(null).value(function(d) { return d.freq; });
+  
+      
+          piesvg.selectAll("path").data(pie(pD)).enter().append("path").attr("d", arc)
+              .each(function(d) { this._current = d; })
+              .style("fill", function(d) { return segColor(d.data.type); })
+                 
+       
+          function arcTween(a) {
+              var i = d3.interpolate(this._current, a);
+              this._current = i(0);
+              return function(t) { return arc(i(t));    };
+          }    
+          return pC;
+      }
+      
+      function legend(lD){
+        var leg = {};
+            
+
+        var legend = d3.select("#d1").append("table").attr('class','legend');
+        
+
+        var tr = legend.append("tbody").attr("class",'tbd1').
+        selectAll("tr").data(lD).enter().append("tr");
+            
+  
+        tr.append("td").append("svg").attr("width", '16').attr("height", '16').append("rect")
+            .attr("width", '16').attr("height", '16')
+			.attr("fill",function(d){ return segColor(d.type); });
+            
+
+        tr.append("td").attr("class",'lname')
+        .text(function(d){ return chat(d.type);});
+
+ 
+        tr.append("td").attr("class",'legendPerc')
+            .text(function(d){ return getLegend(d,lD);});
+
+   
+        
+        function getLegend(d,aD){
+            return d3.format("%")(d.freq/d3.sum(aD.map(function(v){ return v.freq; })));
+        }
+
+        return leg;
+    }
+
+      var tF = ['p1','p2','p3','p4','p5'].map(function(d){ 
+          return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
+      });    
+      
+       pieChart(tF), 
+       legend(tF);  
+
+
+</script>
+
+
+<svg  id="s2" width="200" height="200" > </svg>
+<script>
+    var fData=[
+     {freq:{p1:69.70, p2:68.50, p3:43.30,p4:30.60,p5:15.40}}
+     ];
+     var barColor = 'steelblue';
+     var pd1="雷电将军",pd2="香菱",pd3="行秋",pd4="万叶",pd5="达达利亚";
+         function segColor(c){ return {p1:"#807dba", p2:"#e08214",p3:"#41ab5d",p4:"#0fffff",p5:"#cc00ff"}[c]; }
+         function chat(c){ return {p1:pd1, p2:pd2,p3:pd3,p4:pd4,p5:pd5}[c]; }
+         fData.forEach(function(d){d.total=d.freq.p1+d.freq.p2+d.freq.p3+d.freq.p4+d.freq.p5;});
+         function pieChart(pD){
+             var pC ={},    pieDim ={w:200, h: 200};
+             pieDim.r = Math.min(pieDim.w, pieDim.h) / 2;
+                     
+   
+             var piesvg = d3.select("#d1").select("#s2")
+               .attr("width", pieDim.w).attr("height", pieDim.h).append("g")
+               .attr("transform", "translate("+pieDim.w/2+","+pieDim.h/2+")");
+   
+             var arc = d3.svg.arc().outerRadius(pieDim.r - 10).innerRadius(0);
+     
+      
+             var pie = d3.layout.pie().sort(null).value(function(d) { return d.freq; });
+     
+         
+             piesvg.selectAll("path").data(pie(pD)).enter().append("path").attr("d", arc)
+                 .each(function(d) { this._current = d; })
+                 .style("fill", function(d) { return segColor(d.data.type); })
+                    
+          
+             function arcTween(a) {
+                 var i = d3.interpolate(this._current, a);
+                 this._current = i(0);
+                 return function(t) { return arc(i(t));    };
+             }    
+             return pC;
+         }
+         
+         function legend(lD){
+           var leg = {};
+               
+   
+           var legend = d3.select(d1).append("table").attr('class','legend');
+           
+   
+           var tr = legend.append("tbody").attr("class",'tbd2').
+           selectAll("tr").data(lD).enter().append("tr");
+               
+     
+           tr.append("td").append("svg").attr("width", '16').attr("height", '16').append("rect")
+               .attr("width", '16').attr("height", '16')
+               .attr("fill",function(d){ return segColor(d.type); });
+               
+   
+           tr.append("td").attr("class",'lname')
+           .text(function(d){ return chat(d.type);});
+   
+    
+           tr.append("td").attr("class",'legendPerc')
+               .text(function(d){ return getLegend(d,lD);});
+   
+      
+           
+           function getLegend(d,aD){
+               return d3.format("%")(d.freq/d3.sum(aD.map(function(v){ return v.freq; })));
+           }
+   
+           return leg;
+       }
+   
+         var tF = ['p1','p2','p3','p4','p5'].map(function(d){ 
+             return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
+         });    
+         
+          pieChart(tF), 
+          legend(tF);  
+   
+   
+   </script>
+</div>
+
+<button  style="width: 120px;height: 40px;  background-color: #f1ca1b;" onClick="window.location.href='force.html'" >点击切换力导向图 </button>
+<p></p>
+<img src="images/T1.a0670766.png" width="200" alt="星星">
+<p></p>
+<button style="background-image:url(images/班尼特.png);" onClick="show(0)"></button>
+<button style="background-image:url(images/雷神.png);" onClick="show(1)"></button>
+<button style="background-image:url(images/行秋.png);" onClick="show(2)"></button>
+<button style="background-image:url(images/万叶.png);" onClick="show(3)"></button>
+<div> &nbsp; &nbsp; 86.5% &nbsp; &nbsp; &nbsp; 85.1% &nbsp; &nbsp; &nbsp; &nbsp; 84.8% &nbsp; &nbsp; &nbsp; 84.4% </div>
+
+<img src="images/T2.f4eafe46.png" width="200px">
+<p></p>
+
+<button style="background-image:url(images/钟离.png);" onClick="show(4)"></button>
+<button style="background-image:url(images/神里.png);" onClick="show(5)"></button>
+<button style="background-image:url(images/香菱.png);" onClick="show(6)"></button>
+<div> &nbsp; &nbsp; 77.8% &nbsp; &nbsp; &nbsp; 74.0% &nbsp; &nbsp; &nbsp; &nbsp; 62.4%</div>
+<img src="images/T3.1c57d107.png" width="200px">
+<p></p>
+
+<button style="background-image:url(images/胡桃.png);" onClick="show(7)"></button>
+<button style="background-image:url(images/甘雨.png);" onClick="show(8)"></button>
+<button style="background-image:url(images/温迪.png);" onClick="show(9)"></button>
+<button style="background-image:url(images/心海.png);" onClick="show(10)"></button>
+<button style="background-image:url(images/莫娜.png);" onClick="show(11)"></button>
+<div> &nbsp; &nbsp; 56.5% &nbsp; &nbsp; &nbsp; 47.2% &nbsp; &nbsp; &nbsp; &nbsp; 45.2% &nbsp; &nbsp; &nbsp; 44.8% &nbsp; &nbsp; &nbsp; &nbsp; 39.6%</div>
+<img src="images/T3.1c57d107.png" width="200px">
+<p></p>
+
+<button style="background-image:url(images/阿贝多.png);" onClick="show(12)"></button>
+<button style="background-image:url(images/迪奥娜.png);" onClick="show(13)"></button>
+<button style="background-image:url(images/达达利亚.png);" onClick="show(14)"></button>
+<button style="background-image:url(images/优菈.png);" onClick="show(15)"></button>
+<button style="background-image:url(images/魈.png);" onClick="show(16)"></button>
+<button style="background-image:url(images/宵宫.png);" onClick="show(17)"></button>
+<button style="background-image:url(images/九条.png);" onClick="show(18)"></button>
+<button style="background-image:url(images/砂糖.png);" onClick="show(19)"></button>
+<div> &nbsp; &nbsp; 36.7% &nbsp; &nbsp; &nbsp; 32.6% &nbsp; &nbsp; &nbsp; &nbsp; 28.9% &nbsp; &nbsp; &nbsp; 27.0% &nbsp; &nbsp; &nbsp; &nbsp; 22.2% &nbsp; &nbsp; &nbsp; 17.3% &nbsp; &nbsp; &nbsp; &nbsp; 16.7% &nbsp; &nbsp; &nbsp; 15.5%</div>
+<img src="images/T-.8f797b4b.png" width="200px">
+<p></p>
+
+<button style="background-image:url(images/琴.png);" onClick="show(20)"></button>
+<button style="background-image:url(images/罗莎莉亚.png);" onClick="show(21)"></button>
+<button style="background-image:url(images/皇女.png);" onClick="show(22)"></button>
+<button style="background-image:url(images/凝光.png);" onClick="show(23)"></button>
+<button style="background-image:url(images/可莉.png);" onClick="show(24)"></button>
+<button style="background-image:url(images/北斗.png);" onClick="show(25)"></button>
+<button style="background-image:url(images/刻晴.png);" onClick="show(26)"></button>
+<button style="background-image:url(images/迪卢克.png);" onClick="show(27)"></button>
+<button style="background-image:url(images/托马.png);" onClick="show(28)"></button>
+<div> &nbsp; &nbsp; 20.0% &nbsp; &nbsp; &nbsp; &nbsp;7.6% &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 6.9% &nbsp; &nbsp; &nbsp; &nbsp; 6.4% &nbsp; &nbsp; &nbsp; &nbsp; 4.9% &nbsp; &nbsp; &nbsp; &nbsp; 4.5% &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 4.0% &nbsp; &nbsp; &nbsp; &nbsp; 3.0% &nbsp; &nbsp; &nbsp; &nbsp; 3.0%</div>
+<p> </p>
+<button style="background-image:url(images/芭芭拉.png);" onClick="show(29)"></button>
+<button style="background-image:url(images/女仆.png);" onClick="show(30)"></button>
+<button style="background-image:url(images/空.png);" onClick="show(31)"></button>
+<button style="background-image:url(images/重云.png);" onClick="show(32)"></button>
+<button style="background-image:url(images/七七.png);" onClick="show(33)"></button>
+<button style="background-image:url(images/凯亚.png);" onClick="show(34)"></button>
+<button style="background-image:url(images/烟绯.png);" onClick="show(35)"></button>
+<button style="background-image:url(images/早柚.png);" onClick="show(36)"></button>
+<button style="background-image:url(images/丽莎.png);" onClick="show(37)"></button>
+<div> &nbsp; &nbsp; 2.9% &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1.8% &nbsp; &nbsp; &nbsp; &nbsp; 1.7% &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1.7% &nbsp; &nbsp; &nbsp; &nbsp; 1.6% &nbsp; &nbsp; &nbsp; &nbsp; 1.2% &nbsp; &nbsp; &nbsp; &nbsp; 0.4% &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.3% &nbsp; &nbsp; &nbsp; &nbsp; 0.2%</div>
+<p> </p>
+
+<button style="background-image:url(images/安伯.png);" onClick="show(38)"></button>
+<button style="background-image:url(images/雷泽.png);" onClick="show(39)"></button>
+<button style="background-image:url(images/辛炎.png);" onClick="show(40)"></button>
+<button style="background-image:url(images/埃洛伊.png);" onClick="show(41)"></button>
+<div> &nbsp; &nbsp; 0.2% &nbsp; &nbsp; &nbsp; &nbsp; 0.1% &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.1% &nbsp; &nbsp; &nbsp; &nbsp; 0.0%</div>
+<script>
+    
+  function dashboard(fData){
+
+      var barColor = 'steelblue';
+      function segColor(c){ return {p1:"#807dba", p2:"#e08214",p3:"#41ab5d",p4:"#0fffff",p5:"#cc00ff"}[c]; }
+      function chat(c){ return {p1:cc1, p2:cc2,p3:cc3,p4:cc4,p5:cc5}[c]; }
+   
+      function pieChart(pD){
+          var pC ={},    pieDim ={w:200, h: 200};
+          pieDim.r = Math.min(pieDim.w, pieDim.h) / 2;
+      
+          var piesvg = d3.select(d1).select("#s1")
+            .attr("width", 200).attr("height", 200).append("g")
+            .attr("transform", "translate(100,100)");
+       
+          var arc = d3.svg.arc().outerRadius(pieDim.r - 10).innerRadius(0);
+  
+  
+          var pie = d3.layout.pie().sort(null).value(function(d) { return d.freq; });
+  
+  
+          piesvg.selectAll("path").data(pie(pD)).enter().append("path").attr("d", arc)
+              .each(function(d) { this._current = d; })
+              .style("fill", function(d) { return segColor(d.data.type); })
+                 
+  
+          function arcTween(a) {
+              var i = d3.interpolate(this._current, a);
+              this._current = i(0);
+              return function(t) { return arc(i(t));    };
+          }    
+          return pC;
+      }
+      
+      function legend(lD){
+       var leg={};
+        leg.update = function(nD){
+         
+            var l = d3.select(".tbd1").selectAll("tr").data(nD);
+
+
+            l.select(".lname")
+            .text(function(d){ return chat(d.type);});
+       
+            l.select(".legendPerc").text(function(d){ return getLegend(d,nD);});        
+        }
+        
+          function getLegend(d,aD){ 
+              return d3.format("%")(d.freq/d3.sum(aD.map(function(v){ return v.freq; })));
+          }
+         leg.update(lD);
+  
+      }   
+
+
+      var tF = ['p1','p2','p3','p4','p5'].map(function(d){ 
+          return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
+      });    
+      
+       pieChart(tF), 
+       legend(tF); 
+  }
+
+
+
+ function dashboard2(fData){
+var barColor2 = 'steelblue';
+function segColor2(c){ return {p1:"#807dba", p2:"#e08214",p3:"#41ab5d",p4:"#0fffff",p5:"#cc00ff"}[c]; }
+function chat2(c){ return {p1:pd1, p2:pd2,p3:pd3,p4:pd4,p5:pd5}[c]; }
+
+fData.forEach(function(d){d.total=d.freq.p1+d.freq.p2+d.freq.p3+d.freq.p4+d.freq.p5;});
+
+
+
+function pieChart2(pD){
+    var   pieDim ={w:200, h: 200};
+    pieDim.r = 100;
+
+    var piesvg = d3.select(d1).select("#s2")
+      .attr("width", 200).attr("height", 200).append("g")
+      .attr("transform", "translate(100,100)");
+ 
+    var arc = d3.svg.arc().outerRadius(pieDim.r - 10).innerRadius(0);
+
+
+    var pie = d3.layout.pie().sort(null).value(function(d) { return d.freq; });
+
+
+    piesvg.selectAll("path").data(pie(pD)).enter().append("path").attr("d", arc)
+        .each(function(d) { this._current = d; })
+        .style("fill", function(d) { return segColor(d.data.type); })
+           
+
+    function arcTween(a) {
+        var i = d3.interpolate(this._current, a);
+        this._current = i(0);
+        return function(t) { return arc(i(t));    };
+    }    
+  
+}
+
+function legend2(lD){
+ var leg={};
+  leg.update2 = function(nD){
+   
+      var l = d3.select(".tbd2").selectAll("tr").data(nD);
+
+
+      l.select(".lname")
+      .text(function(d){ return chat2(d.type);});
+ 
+      l.select(".legendPerc").text(function(d){ return getLegend2(d,nD);});        
+  }
+  
+    function getLegend2(d,aD){ 
+        return d3.format("%")(d.freq/d3.sum(aD.map(function(v){ return v.freq; })));
+    }
+   leg.update2(lD);
+
+}   
+
+
+var tF = ['p1','p2','p3','p4','p5'].map(function(d){ 
+    return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))}; 
+});    
+
+ pieChart2(tF), 
+ legend2(tF); 
+}
+  </script>
+
+  <script>
+function show(i){
+d3.csv("data/weapon.csv", function(data) {
+cc1=data[i].weapon1;
+cc2=data[i].weapon2;
+cc3=data[i].weapon3;
+cc4=data[i].weapon4;
+cc5=data[i].weapon5;
+
+var pp1=data[i].percentage1;
+var pp2=data[i].percentage2;
+var pp3=data[i].percentage3;
+var pp4=data[i].percentage4;
+var pp5=data[i].percentage5;
+
+var freqData=[
+  {freq:{p1:pp1, p2:pp2, p3:pp3,p4:pp4,p5:pp5}}
+  ];
+
+ dashboard(freqData);  
+});
+
+
+d3.csv("data/pd.csv", function(data) {
+pd1=data[i].c1;
+pd2=data[i].c2;
+pd3=data[i].c3;
+pd4=data[i].c4;
+pd5=data[i].c5;
+
+var pp1=data[i].percentage1;
+var pp2=data[i].percentage2;
+var pp3=data[i].percentage3;
+var pp4=data[i].percentage4;
+var pp5=data[i].percentage5;
+
+var freqData2=[
+  {freq:{p1:pp1, p2:pp2, p3:pp3,p4:pp4,p5:pp5}}
+  ];
+
+ dashboard2(freqData2);  
+});
+}
+  </script>
+</body>
+</html>
